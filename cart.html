@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout - IN Tech Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .checkout-box {
+      background: #1e1e1e;
+      border-radius: 15px;
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 0 20px rgba(0, 216, 255, 0.3);
+    }
+
+    .checkout-box h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #00d8ff;
+      text-align: center;
+    }
+
+    .product-summary {
+      margin-bottom: 30px;
+    }
+
+    .product-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+      padding: 10px 0;
+      gap: 10px;
+    }
+
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .product-info img {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .product-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .remove-btn {
+      background: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .total {
+      font-size: 20px;
+      font-weight: 600;
+      color: #00ff94;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+    }
+
+    button.pay-btn {
+      margin-top: 20px;
+      background: linear-gradient(135deg, #00d8ff, #00ff94);
+      color: #121212;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    button.pay-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    p.empty-cart {
+      text-align: center;
+      font-size: 16px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="checkout-box">
+    <h2>Confirm Your Order</h2>
+    <div class="product-summary" id="summary">
+      <!-- Items will be loaded dynamically -->
+    </div>
+    <button class="pay-btn" onclick="confirmCOD()">Pay on Delivery</button>
+  </div>
+
+  <script>
+    // Sample cartItems to test with working images
+    const sampleCartItems = [
+     
+    ];
+
+    // Set to localStorage only once (comment this after testing)
+    if (!localStorage.getItem('cartItems')) {
+      localStorage.setItem('cartItems', JSON.stringify(sampleCartItems));
+    }
+
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const summaryBox = document.getElementById('summary');
+    let totalAmount = 0;
+
+    function updateCart() {
+      summaryBox.innerHTML = '';
+      totalAmount = 0;
+
+      if (cartItems.length === 0) {
+        summaryBox.innerHTML = "<p class='empty-cart'>Your cart is empty.</p>";
+        document.querySelector('.pay-btn').disabled = true;
+        return;
+      }
+
+      cartItems.forEach((item, index) => {
+        const qty = item.quantity || 1;
+        const itemTotal = item.price * qty;
+        totalAmount += itemTotal;
+
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'product-item';
+        itemDiv.innerHTML = `
+          <div class="product-info">
+            <img src="${item.image || 'https://via.placeholder.com/50'}" alt="${item.name}">
+            <div class="product-details">
+              <span>${item.name} × ${qty}</span>
+              <span>₹${itemTotal.toLocaleString()}</span>
+            </div>
+          </div>
+          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        `;
+        summaryBox.appendChild(itemDiv);
+      });
+
+      const totalRow = document.createElement('div');
+      totalRow.className = 'total';
+      totalRow.innerHTML = `<span>Total</span><span>₹${totalAmount.toLocaleString()}</span>`;
+      summaryBox.appendChild(totalRow);
+    }
+
+    function removeItem(index) {
+      cartItems.splice(index, 1);
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      updateCart();
+    }
+function confirmCOD() {
+  if (cartItems.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+
+  const orderData = {
+    items: cartItems,
+    total: totalAmount
+  };
+
+  fetch('http://localhost/in_tech_shop/submit_order.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(orderData)
+  })
+  .then(res => res.json())
+  .then(response => {
+    alert(response.message || "✅ Order placed successfully!");
+    localStorage.removeItem('cartItems');
+    window.location.href = "index.html";
+  })
+  .catch(err => {
+    console.error("Order failed:", err);
+    alert("❌ Failed to place order. Try again.");
+  });
+}
+
+
+    // Initial cart load
+    updateCart();
+  </script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IN Tech Shop - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00d8ff;
+      --dark-bg: #121212;
+      --card-bg: #1e1e1e;
+      --hover-primary: #00b7d4;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--dark-bg);
+      color: #f0f0f0;
+      padding: 0 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Particles background container */
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1f1f1f;
+      padding: 20px;
+      border-bottom: 1px solid #333;
+    }
+
+    header h1 {
+      font-size: 26px;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+
+    nav a {
+      color: #f0f0f0;
+      margin-left: 20px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px 40px;
+      background: radial-gradient(circle at top, #1c1c1c, #121212);
+      border-radius: 20px;
+      margin-top: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .hero h2 {
+      font-size: 40px;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #00d8ff, #00ff94);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #aaa;
+      margin: 20px 0;
+    }
+
+    .hero button {
+      padding: 14px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--primary), #00ff94);
+      color: #121212;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .hero button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    h2.section-title {
+      margin-top: 50px;
+      font-size: 28px;
+      border-left: 5px solid var(--primary);
+      padding-left: 15px;
+    }
+
+    .products-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+      margin-bottom: 60px;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+    }
+
+    .product-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .product-card h3 {
+      font-size: 18px;
+      margin: 10px 0 5px;
+    }
+
+    .product-card p {
+      font-size: 16px;
+      color: #ccc;
+    }
+
+    .product-card button {
+      margin-top: 12px;
+      padding: 10px 20px;
+      background: var(--primary);
+      border: none;
+      border-radius: 50px;
+      color: #121212;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .product-card button:hover {
+      background: var(--hover-primary);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 14px;
+      color: #777;
+      border-top: 1px solid #333;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Particles Background -->
+<div id="particles-js"></div>
+
+<header>
+  <h1>IN Tech Shop</h1>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Product</a>
+    <a href="#">About</a>
+    <a href="cart.html">Cart</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Upgrade Your Gaming Experience</h2>
+  <p>Discover the best consoles, accessories, and games for your ultimate setup.</p>
+  <button onclick="scrollToProducts()">Shop Now</button>
+</section>
+
+<h2 class="section-title">Featured Products</h2>
+<div class="products-container" id="product-list"></div>
+
+<footer>
+  <p>&copy; 2025 IN Tech Shop. All rights reserved.</p>
+</footer>
+
+<!-- Product Script -->
+<script>
+  const products = [
+    { name: "PS5 Bundle", price: 59999, imageUrl: "Product/PS5 Bundle.png" },
+    { name: "PS4 Slim", price: 29999, imageUrl: "Product/ps4 slim1.png" },
+    { name: "DualSense Controller", price: 5999, imageUrl: "Product/DualSense Controller.png" },
+    { name: "PlayStation Camera", price: 3499, imageUrl: "Product/PlayStation Camera.png" },
+    { name: "VR Headset", price: 19999, imageUrl: "Product/VR Headset.png" },
+    { name: "Gaming Chair", price: 8999, imageUrl: "Product/Gaming Chair.png" },
+    { name: "PS5 Charging Dock", price: 2999, imageUrl: "Product/PS5 Charging Dock.png" },
+    { name: "PS5 Skin", price: 999, imageUrl: "Product/PS5 Skin.png" },
+    { name: "Game: Spider-Man", price: 3499, imageUrl: "Product/spider-man.png" },
+    { name: "Game: FIFA 24", price: 4499, imageUrl: "Product/FIFA 24.png" }
+  ];
+
+  const productList = document.getElementById('product-list');
+
+  products.forEach(product => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <img src="${product.imageUrl}" alt="${product.name}" />
+      <h3>${product.name}</h3>
+      <p>₹${product.price.toLocaleString()}</p>
+      <button onclick="addToCart('${product.name}', ${product.price}, '${product.imageUrl}')">Add to Cart</button>
+    `;
+    productList.appendChild(card);
+  });
+
+  function addToCart(name, price, imageUrl) {
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    cartItems.push({ name, price, imageUrl });
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    alert(`${name} added to cart!`);
+  }
+
+  function scrollToProducts() {
+    document.getElementById("product-list").scrollIntoView({ behavior: "smooth" });
+  }
+</script>
+
+<!-- Particles.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 60, density: { enable: true, value_area: 800
+} },
+color: { value: "#00d8ff" },
+shape: {
+type: "circle",
+},
+opacity: {
+value: 0.5,
+random: false,
+},
+size: {
+value: 3,
+random: true,
+},
+line_linked: {
+enable: true,
+distance: 150,
+color: "#00ff94",
+opacity: 0.3,
+width: 1,
+},
+move: {
+enable: true,
+speed: 1.5,
+direction: "none",
+random: false,
+straight: false,
+out_mode: "out",
+}
+},
+interactivity: {
+detect_on: "canvas",
+events: {
+onhover: { enable: true, mode: "grab" },
+onclick: { enable: true, mode: "push" },
+resize: true
+},
+modes: {
+grab: { distance: 140, line_linked: { opacity: 1 } },
+push: { particles_nb: 4 },
+}
+},
+retina_detect: true
+});
+</script>
+
+</body> </html>
